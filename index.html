@@ -33,9 +33,11 @@ body > *{
 	flex-basis:50%;
 	overflow:hidden;
 }
-h1{
-	font-weight:bold;
-	text-decoration:underline;
+a{
+	color:#00f;
+}
+a:active{
+	color:#fff;
 }
 .input,
 .output{
@@ -77,9 +79,19 @@ textarea{
 document.addEventListener("DOMContentLoaded", function(){
 	var input = document.getElementById("htmlIn");
 	var output = document.getElementById("htmlOut");
+	var select = document.getElementById("select");
 
 	update();
 	input.addEventListener("input", update);
+	select.addEventListener("click", function(){
+		var wind = output.contentWindow;
+		var selection = wind.getSelection();
+		var range = wind.document.createRange();
+		range.selectNodeContents(wind.document.body);
+		selection.removeAllRanges();
+		selection.addRange(range);
+		output.focus();
+	});
 
 	function update(){
 		output.setAttribute("srcdoc", input.value);
@@ -90,8 +102,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	<body>
 		<div class="input">
 			<div class="header">
-				<h1>HTML Preview</h1>
 				<p>Paste HTML below. The rendered HTML will appear on the right.</p>
+				<p><a href="#" id="select">Select all rendered HTML</a></p>
 			</div>
 			<textarea class="main" id="htmlIn" spellcheck="false" >&lt;h1&gt;Hello, world!&lt;/h1&gt;</textarea>
 		</div>
