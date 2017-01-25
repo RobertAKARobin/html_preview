@@ -35,6 +35,9 @@ body > *{
 }
 a{
 	color:#00f;
+	cursor:pointer;
+	text-decoration:underline;
+	margin-right:5px;
 }
 a:active{
 	color:#fff;
@@ -77,9 +80,16 @@ document.addEventListener("DOMContentLoaded", function(){
 	var input = document.getElementById("htmlIn");
 	var output = document.getElementById("htmlOut");
 	var select = document.getElementById("select");
+	var clear = document.getElementById("clear");
+	var reset = document.getElementById("reset");
 
-	update();
+	revert();
 	input.addEventListener("input", update);
+	reset.addEventListener("click", revert);
+	clear.addEventListener("click", function(){
+		input.value = "";
+		update();
+	});
 	select.addEventListener("click", function(){
 		var wind = output.contentWindow;
 		var selection = wind.getSelection();
@@ -93,6 +103,12 @@ document.addEventListener("DOMContentLoaded", function(){
 	function update(){
 		output.setAttribute("srcdoc", input.value);
 	}
+
+	function revert(){
+		var text = "%3C!DOCTYPE%20html%3E%0A%3Chtml%3E%0A%20%3Chead%3E%0A%20%20%3Ctitle%3EMy%20Page%3C%2Ftitle%3E%0A%20%3C%2Fhead%3E%0A%20%3Cbody%3E%0A%20%20%3Ch1%3EHello%2C%20world!%3C%2Fh1%3E%0A%20%3C%2Fbody%3E%0A%3C%2Fhtml%3E";
+		input.value = decodeURIComponent(text);
+		update();
+	}
 });
 		</script>
 	</head>
@@ -100,9 +116,13 @@ document.addEventListener("DOMContentLoaded", function(){
 		<div class="input">
 			<div class="header">
 				<p>Paste HTML below. The rendered HTML will appear on the right.</p>
-				<p><a href="#" id="select">Select all rendered HTML</a></p>
+				<p>
+					<a id="clear">Clear</a>
+					<a id="reset">Reset</a>
+					<a id="select">Select all rendered HTML</a>
+				</p>
 			</div>
-			<textarea class="main" id="htmlIn" spellcheck="false" >&lt;h1&gt;Hello, world!&lt;/h1&gt;</textarea>
+			<textarea class="main" id="htmlIn" spellcheck="false" ></textarea>
 		</div>
 		<div class="output">
 			<iframe class="main" id="htmlOut"></iframe>
